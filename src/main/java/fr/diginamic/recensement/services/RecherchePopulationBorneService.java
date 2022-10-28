@@ -3,6 +3,8 @@ package fr.diginamic.recensement.services;
 import java.util.List;
 import java.util.Scanner;
 
+import org.apache.commons.lang3.math.NumberUtils;
+
 import fr.diginamic.recensement.entites.Recensement;
 import fr.diginamic.recensement.entites.Ville;
 import fr.diginamic.recensement.exception.RecensementException;
@@ -26,14 +28,22 @@ public class RecherchePopulationBorneService extends MenuService {
 		System.out.println("Choississez une population minimum (en milliers d'habitants): ");
 		String saisieMin = scanner.nextLine();
 		
+		if (!NumberUtils.isDigits(saisieMin)) {
+			throw new RecensementException("Erreur: Merci de renseigner un chiffre");
+		}
+		
 		System.out.println("Choississez une population maximum (en milliers d'habitants): ");
 		String saisieMax = scanner.nextLine();
+		
+		if (!NumberUtils.isDigits(saisieMax)) {
+			throw new RecensementException("Erreur: Merci de renseigner un chiffre");
+		}
 
 		int min = Integer.parseInt(saisieMin) * 1000;
 		int max = Integer.parseInt(saisieMax) * 1000;
 		
 		if(min > max || min<0 || max<0) {
-			throw new RecensementException("Erreur");
+			throw new RecensementException("Erreur: le chiffre saisi est négatif ou le minimum est supérieur au maximum");
 		}
 		
 		List<Ville> villes = rec.getVilles();
